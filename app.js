@@ -1,8 +1,10 @@
 const express = require("express");
 var bodyParser = require("body-parser");
+const fs = require("fs");
 const cors = require("cors");
-const app = express();
 
+const app = express();
+app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
@@ -26,13 +28,11 @@ var corsOptions = {
 app.use(cors(corsOptions));
 let products = [];
 
-app.get("/api/products", req, (res) => {
+app.get("/api/products", (req, res )=> {
   res.json(products);
-  let data = {};
-  req.json(data);
-});
 
-app.post("/api/products", req, (res) => {
+
+app.post("/api/products", (req, res) => {
   let product = {};
   product = req.body;
   product.push({ ...product });
@@ -40,7 +40,7 @@ app.post("/api/products", req, (res) => {
   res.json(products);
 });
 
-app.put("/api/products", req, (res) => {
+app.put("/api/products", (req, res )=> {
   let product = {};
   product = req.body;
   product.map((prod, index) => {
@@ -58,8 +58,20 @@ app.delete("/api/products", (req, res) => {
   res.json(products);
 });
 
+app.get("/api/file/write",(req, res) =>{
+  let content = " test file constent ";
+  s.writeFile("/test.txt",content , (err) => {
+    if(err){
+  console.error(err);
+    }else{
+      res.json(" File written Successfully");
+    }
+  })
+} )
+
+
 app.get("/", (req, res) => {
   res.json("Hoşgeldiniz Express Js Ana Sayfasına");
 });
 app.listen(process.env.port || 5055);
-console.log(" webServer listening at " + (process.env.port || 5055));
+console.log(" webServer listening at " + (process.env.port || 5055))})
