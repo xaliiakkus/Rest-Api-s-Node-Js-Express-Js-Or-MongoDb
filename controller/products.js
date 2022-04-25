@@ -1,34 +1,34 @@
-let products = [];
+const {
+  getProductsMongoose,
+  createProductsMongoose,
+  updateProductsMongoose,
+  deleteProductsMongoose,
+} = require("../model/products");
 
-const getProducts = async (req, res) => {
-  res.json(products);
-};
+const getProducts = async(req, res)=>{
+  let products = await getProductsMongoose();
+  res.json(products) 
+}
 
 const createProducts = async (req, res) => {
   let product = {};
   product = req.body;
-  products.push({ ...product });
-
-  res.json(products);
+  let response = await createProductsMongoose(product);
+  res.json(response);
 };
 const updateProducts = async (req, res) => {
   let product = {};
   product = req.body;
 
-  products.map((prod, index) => {
-    if (prod.id == product.id) {
-      products[index] = { ...product };
-    }
-  });
-  res.json(products);
+  let response = await updateProductsMongoose(product);
+  res.json(response);
 };
 const deleteProducts = async (req, res) => {
-  let ID = 4;
+  let ID = 1;
 
   ID = req.params.id;
-  products = products.filter((prod) => prod.id.toString() !== ID.toString());
-
-  res.json(products);
+  let response = await deleteProductsMongoose(ID);
+  res.json(response);
 };
 
 module.exports = {
